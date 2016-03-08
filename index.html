@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.min.js"></script>
+  </head>
+  <body ng-app='avgTest'>
+    <style>
+      *{
+        font-size : 24pt;
+      }
+      header{
+        background-color : rgba(128,128,128,0.5);
+        height : 6.0rem;
+        border : 5px solid black;
+        border-radius : 0px 0px 15px 15px;
+        box-sizing : border-box;
+        margin-bottom : 20px;
+        position : fixed;
+        top : 0px;
+        width : 100%;
+      }
+
+      table{
+        background-color : black;}
+      td{
+        text-align : center;
+        font-weight : bold;
+        background-color : lightgrey;
+        border : 1px solid black;
+      }
+
+      input{
+        width : 100px; 
+      }
+
+      .header-table, .header-table *{
+        border : 0px solid transparent;
+        background-color : transparent;
+        font-size : 2.0rem;
+      }
+
+      .header-table td:first-child{
+        width : 10%;
+      }
+
+      .header-table td:nth-child(2){
+        width : 90%;
+      }
+    </style>
+    <header>
+      <table class="header-table">
+        <tr>
+          <td>
+            <img src="EagleLogo.png" style="height : 5.5rem;" </td>
+            <td>
+              Intro to Engineering Data Tracker
+            </td>
+      </table>
+    </header>
+
+    <div style="height : 6.0rem; width : 100%;"></div>
+    <table ng-controller='avgController'>
+      <tr>
+        <td></td>
+        <td>Mass</td>
+        <td>Average</td>
+        <td>Standard Deviation</td>
+        <td ng-repeat="col in cols track by $index">
+          Trial #{{$index+1}}
+          <button ng-if="$last" ng-click="addCol()"><strong><center>+</center></strong></button>
+        </td>
+
+      </tr>
+      <tr ng-repeat="row in rows track by $index">
+        <td><button ng-if="$last" ng-click="addRow()"><strong>+</strong></button>
+          <td><input></td>
+          <td>{{avg(d[$index]).toFixed(2)}}</td>
+          <td>{{std(d[$index]).toFixed(2)}}</td>
+          <td ng-repeat="col in cols track by $index">
+            <input ng-model="d[$parent.$index][$index]">
+          </td>
+      </tr>
+      <!-- ng-repeat rows-->
+    </table>
+    
+    <script>
+      angular.module('avgTest', []).controller('avgController', ['$scope', function($scope) {
+          $scope.d = [[]];
+          $scope.avg = function(arr) {
+            return arr.reduce(function(p, c) {
+              return p + parseFloat(c);
+            }, 0) / arr.length;
+          }
+          $scope.std = function(arr) {
+            var av = $scope.avg(arr);
+            return Math.sqrt(arr.map(function(c) {
+              return (c - av) * (c - av)
+            }).reduce(function(p, c) {
+              return p + parseFloat(c);
+            }, 0) / (arr.length - 1));
+          }
+
+          $scope.cols = [0];
+          $scope.addCol = function() {
+            $scope.cols.push(0);
+          };
+
+          $scope.rows = [0];
+          $scope.addRow = function(){
+            $scope.rows.push(0);
+            $scope.d.push([]);
+          }
+      }]);
+    </script>
+  </body>
+</html>
