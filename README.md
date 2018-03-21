@@ -6,4 +6,8 @@ This project was used as part of a science class to aid students in distinguishi
 - Angular
 
 ### Issues
-N/A
+- Error handling when erasing values
+
+### Next Steps
+- Include a way to link measurements together with other devices
+- Graphical representations of data
